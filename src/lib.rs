@@ -167,6 +167,9 @@ pub trait LanguageServerHandler {
     /// To provide completions, respond to the client with the `respond` method.
     ///
     /// ```
+    /// use lspeasy::{LanguageServerHandler, LanguageServer, CompletionRequest};
+    /// use lsp_types::{CompletionItem, CompletionItemKind};
+    /// 
     /// struct MyHandler;
     /// impl LanguageServerHandler for MyHandler {
     ///     fn completion(&self, _server: &LanguageServer, req: CompletionRequest) {

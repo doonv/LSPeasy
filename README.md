@@ -1,6 +1,6 @@
 # LSPeasy
 
-**Language servers made simple, lightweight & easy**
+**Language servers made simple, lightweight, and easy**
 
 LSPeasy allows you to easily create a `stdio` language server with it's simple handler traits.
 
