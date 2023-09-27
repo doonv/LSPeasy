@@ -1,6 +1,6 @@
 use std::fs;
 
-use lsp_types::{
+use lspeasy::lsp_types::{
     CompletionItem, CompletionItemKind, CompletionOptions, Diagnostic, DiagnosticOptions,
     DiagnosticServerCapabilities, DiagnosticSeverity, MessageType, Position, Range,
     ServerCapabilities, TextDocumentSyncCapability, TextDocumentSyncKind, TextDocumentSyncOptions,

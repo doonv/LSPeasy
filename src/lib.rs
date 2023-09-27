@@ -4,6 +4,8 @@
 use lsp_server::{
     Connection, IoThreads, Message, Notification, ProtocolError, RequestId, Response,
 };
+
+pub use lsp_types;
 use lsp_types::{
     CompletionItem, Diagnostic, DocumentDiagnosticReport, FullDocumentDiagnosticReport,
     LogMessageParams, MessageType, PublishDiagnosticsParams, RelatedFullDocumentDiagnosticReport,
@@ -168,8 +170,8 @@ pub trait LanguageServerHandler {
     ///
     /// ```
     /// use lspeasy::{LanguageServerHandler, LanguageServer, CompletionRequest};
-    /// use lsp_types::{CompletionItem, CompletionItemKind};
-    /// 
+    /// use lspeasy::lsp_types::{CompletionItem, CompletionItemKind};
+    ///
     /// struct MyHandler;
     /// impl LanguageServerHandler for MyHandler {
     ///     fn completion(&self, _server: &LanguageServer, req: CompletionRequest) {

@@ -1,4 +1,4 @@
-use lsp_types::{MessageType, ServerCapabilities};
+use lspeasy::lsp_types::{MessageType, ServerCapabilities};
 use lspeasy::{LanguageServer, LanguageServerHandler};
 
 // Create the handler class, which houses

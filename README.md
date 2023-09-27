@@ -14,7 +14,6 @@ First of all, import the `lspeasy` & `lsp-types` crates:
 
 ```toml
 lspeasy = { git = "https://github.com/doonv/LSPeasy.git" }
-lsp-types = "0.94.1"
 ```
 
 Then, let's create a basic handler, that says hello to the client via the `LanguageServer`.
