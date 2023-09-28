@@ -7,10 +7,10 @@ use lsp_server::{
 
 pub use lsp_types;
 use lsp_types::{
-    CompletionItem, Diagnostic, DocumentDiagnosticReport, FullDocumentDiagnosticReport,
-    LogMessageParams, MessageType, PublishDiagnosticsParams, RelatedFullDocumentDiagnosticReport,
-    ServerCapabilities, TextDocumentContentChangeEvent, TextDocumentItem, Url,
-    VersionedTextDocumentIdentifier,
+    CompletionContext, CompletionItem, Diagnostic, DocumentDiagnosticReport,
+    FullDocumentDiagnosticReport, LogMessageParams, MessageType, Position,
+    PublishDiagnosticsParams, RelatedFullDocumentDiagnosticReport, ServerCapabilities,
+    TextDocumentContentChangeEvent, TextDocumentItem, Url, VersionedTextDocumentIdentifier,
 };
 
 /// A LSPeasy language server
@@ -47,9 +47,9 @@ impl LanguageServer {
         handler.init(self);
 
         for msg in &self.connection.receiver {
-            // self.log(format!("Got a message!\n{msg:?}"), MessageType::INFO);
+            self.log(format!("Got a message!\n{msg:#?}"), MessageType::INFO);
             match msg {
-                Message::Request(req) => {
+                Message::Request(mut req) => {
                     if self.connection.handle_shutdown(&req)? {
                         return Ok(());
                     }
@@ -59,6 +59,26 @@ impl LanguageServer {
                             CompletionRequest {
                                 id: req.id,
                                 server: self,
+                                context: match req.params.get_mut("context") {
+                                    Some(c) => Some(serde_json::from_value(c.take()).unwrap()),
+                                    None => None,
+                                },
+                                position: serde_json::from_value(
+                                    req.params.get_mut("position").unwrap().take(),
+                                )
+                                .unwrap(),
+                                text_document: Url::parse(
+                                    req.params
+                                        .get_mut("textDocument")
+                                        .unwrap()
+                                        .take()
+                                        .get_mut("uri")
+                                        .unwrap()
+                                        .take()
+                                        .as_str()
+                                        .unwrap(),
+                                )
+                                .unwrap(),
                             },
                         ),
                         "textDocument/diagnostic" => handler.diagnostics(
@@ -220,6 +240,9 @@ pub trait LanguageServerHandler {
 pub struct CompletionRequest<'a> {
     id: RequestId,
     server: &'a LanguageServer,
+    pub context: Option<CompletionContext>,
+    pub position: Position,
+    pub text_document: Url,
 }
 
 impl<'a> CompletionRequest<'a> {
